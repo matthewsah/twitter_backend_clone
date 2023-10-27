@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,11 +10,14 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
+	"github.com/matthewsah/twitter_backend_clone/internal/database"
+
+	_ "github.com/lib/pq"
 )
 
-// type api_config struct {
-// 	DB *database.Queries
-// }
+type apiConfig struct {
+	DB *database.Queries
+}
 
 func main() {
 	fmt.Println("hello world")
@@ -22,6 +26,20 @@ func main() {
 	portString := os.Getenv("PORT")
 	if portString == "" {
 		log.Fatal("Port is not found in the environment")
+	}
+
+	dbURL := os.Getenv("DB_URL")
+	if dbURL == "" {
+		log.Fatal("DB URL is not found in the environment")
+	}
+
+	conn, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		log.Fatal("unable to connect to postgresql database", err)
+	}
+
+	apiCfg := apiConfig{
+		DB: database.New(conn),
 	}
 
 	router := chi.NewRouter()
@@ -36,8 +54,13 @@ func main() {
 	}))
 
 	v1Router := chi.NewRouter()
-	v1Router.Get("/healthz", handler_readiness)
-	v1Router.Get("/err", handler_err)
+
+	// test to make sure server is running and can serve requests
+	v1Router.Get("/healthz", handlerReadiness)
+	v1Router.Get("/err", handlerErr)
+
+	// add a new user
+	v1Router.Post("/users", apiCfg.handlerCreateUser)
 
 	router.Mount("/v1", v1Router)
 
@@ -47,7 +70,7 @@ func main() {
 	}
 
 	log.Printf("server starting on port %v", portString)
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
