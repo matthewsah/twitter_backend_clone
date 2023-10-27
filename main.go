@@ -61,6 +61,7 @@ func main() {
 
 	// add a new user
 	v1Router.Post("/users", apiCfg.handlerCreateUser)
+	v1Router.Get("/users", apiCfg.handlerGetUser)
 
 	router.Mount("/v1", v1Router)
 
