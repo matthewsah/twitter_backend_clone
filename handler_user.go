@@ -10,6 +10,10 @@ import (
 	"github.com/matthewsah/twitter_backend_clone/internal/database"
 )
 
+// To create a user, send a request with JSON conents
+// Name
+// Username
+// Password
 func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) {
 	// parameters come from the JSON body
 	type parameters struct {
@@ -44,6 +48,7 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 	respondWithJSON(w, 201, databaseUserToUser(user))
 }
 
+// Get a user by api key
 func (apiCfg *apiConfig) handlerGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
 	respondWithJSON(w, 200, databaseUserToUser(user))
 }

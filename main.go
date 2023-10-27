@@ -64,15 +64,16 @@ func main() {
 	// get a new user by apikey
 	v1Router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerGetUser))
 
-	// add a tweet
-	v1Router.Post("/tweets", apiCfg.middlewareAuth(apiCfg.handlerCreateTweet))
-
 	// follow a user
 	v1Router.Post("/follow", apiCfg.middlewareAuth(apiCfg.handlerCreateFollow))
-	// get accounts that the user follows
+	// get accounts/user that the user follows
 	v1Router.Get("/follow", apiCfg.middlewareAuth(apiCfg.handlerGetFollows))
 	// unfollow a user
 	v1Router.Delete("/follow/{followID}", apiCfg.middlewareAuth(apiCfg.handlerDeleteFollow))
+
+	// post a tweet
+	v1Router.Post("/tweets", apiCfg.middlewareAuth(apiCfg.handlerCreateTweet))
+	v1Router.Get("/home", apiCfg.middlewareAuth(apiCfg.handlerGetFeed))
 
 	router.Mount("/v1", v1Router)
 

@@ -49,7 +49,7 @@ func (apiCfg *apiConfig) handlerGetFollows(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	respondWithJSON(w, 201, databaseFollowsToFollows(follows))
+	respondWithJSON(w, 200, databaseFollowsToFollows(follows))
 }
 
 func (apiCfg *apiConfig) handlerDeleteFollow(w http.ResponseWriter, r *http.Request, user database.User) {

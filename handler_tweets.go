@@ -10,6 +10,8 @@ import (
 	"github.com/matthewsah/twitter_backend_clone/internal/database"
 )
 
+// To create a tweet, the request should contain the user's api key in the header
+// The request should also contain Content in the JSON body
 func (apiCfg *apiConfig) handlerCreateTweet(w http.ResponseWriter, r *http.Request, user database.User) {
 	// parameters come from the JSON body
 	type parameters struct {
