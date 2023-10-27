@@ -10,6 +10,14 @@ import (
 	"github.com/google/uuid"
 )
 
+type Tweet struct {
+	ID        uuid.UUID
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Content   string
+	UserID    uuid.UUID
+}
+
 type User struct {
 	ID        uuid.UUID
 	CreatedAt time.Time

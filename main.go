@@ -61,7 +61,11 @@ func main() {
 
 	// add a new user
 	v1Router.Post("/users", apiCfg.handlerCreateUser)
-	v1Router.Get("/users", apiCfg.handlerGetUser)
+	// get a new user by apikey
+	v1Router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerGetUser))
+
+	// add a tweet
+	v1Router.Post("/tweets", apiCfg.middlewareAuth(apiCfg.handlerCreateTweet))
 
 	router.Mount("/v1", v1Router)
 

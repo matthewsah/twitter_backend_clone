@@ -10,12 +10,10 @@ import (
 	"github.com/matthewsah/twitter_backend_clone/internal/database"
 )
 
-func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) {
+func (apiCfg *apiConfig) handlerCreateTweet(w http.ResponseWriter, r *http.Request, user database.User) {
 	// parameters come from the JSON body
 	type parameters struct {
-		Name     string `json:"name"`
-		Username string `json:"username"`
-		Password string `json:"password"`
+		Content string `json:"content"`
 	}
 	decoder := json.NewDecoder(r.Body)
 
@@ -25,15 +23,14 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		respondWithError(w, 400, fmt.Sprintf("Error parsing JSON: %v", err))
 	}
 
-	fmt.Println("params, ", params)
+	fmt.Println("received params ", params)
 
-	user, err := apiCfg.DB.CreateUser(r.Context(), database.CreateUserParams{
+	tweet, err := apiCfg.DB.CreateTweet(r.Context(), database.CreateTweetParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		Name:      params.Name,
-		Username:  params.Username,
-		Password:  params.Password,
+		Content:   params.Content,
+		UserID:    user.ID,
 	})
 
 	if err != nil {
@@ -41,9 +38,5 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	respondWithJSON(w, 201, databaseUserToUser(user))
-}
-
-func (apiCfg *apiConfig) handlerGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
-	respondWithJSON(w, 200, databaseUserToUser(user))
+	respondWithJSON(w, 201, databaseTweetToTweet(tweet))
 }

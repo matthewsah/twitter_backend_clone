@@ -17,6 +17,14 @@ type User struct {
 	APIKey    string    `json:"api_key"`
 }
 
+type Tweet struct {
+	ID        uuid.UUID `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Content   string    `json:"content"`
+	UserID    uuid.UUID `json:"user_id"`
+}
+
 func databaseUserToUser(dbUser database.User) User {
 	return User{
 		ID:        dbUser.ID,
@@ -26,5 +34,15 @@ func databaseUserToUser(dbUser database.User) User {
 		Username:  dbUser.Username,
 		Password:  dbUser.Password,
 		APIKey:    dbUser.ApiKey,
+	}
+}
+
+func databaseTweetToTweet(dbTweet database.Tweet) Tweet {
+	return Tweet{
+		ID:        dbTweet.ID,
+		CreatedAt: dbTweet.CreatedAt,
+		UpdatedAt: dbTweet.UpdatedAt,
+		Content:   dbTweet.Content,
+		UserID:    dbTweet.UserID,
 	}
 }
