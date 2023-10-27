@@ -10,6 +10,14 @@ import (
 	"github.com/google/uuid"
 )
 
+type Follow struct {
+	ID             uuid.UUID
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
+	UserID         uuid.UUID
+	UserToFollowID uuid.UUID
+}
+
 type Tweet struct {
 	ID        uuid.UUID
 	CreatedAt time.Time

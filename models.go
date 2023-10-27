@@ -25,6 +25,14 @@ type Tweet struct {
 	UserID    uuid.UUID `json:"user_id"`
 }
 
+type Follow struct {
+	ID             uuid.UUID `json:"id"`
+	CreatedAt      time.Time `json:"created_at"`
+	UpdatedAt      time.Time `json:"updated_at"`
+	UserID         uuid.UUID `json:"user_id"`
+	UserToFollowID uuid.UUID `json:"user_to_follow_id"`
+}
+
 func databaseUserToUser(dbUser database.User) User {
 	return User{
 		ID:        dbUser.ID,
@@ -45,4 +53,22 @@ func databaseTweetToTweet(dbTweet database.Tweet) Tweet {
 		Content:   dbTweet.Content,
 		UserID:    dbTweet.UserID,
 	}
+}
+
+func databaseFollowToFollow(dbFollow database.Follow) Follow {
+	return Follow{
+		ID:             dbFollow.ID,
+		CreatedAt:      dbFollow.CreatedAt,
+		UpdatedAt:      dbFollow.UpdatedAt,
+		UserID:         dbFollow.UserID,
+		UserToFollowID: dbFollow.UserToFollowID,
+	}
+}
+
+func databaseFollowsToFollows(dbFollows []database.Follow) []Follow {
+	follows := []Follow{}
+	for _, follow := range dbFollows {
+		follows = append(follows, databaseFollowToFollow(follow))
+	}
+	return follows
 }

@@ -67,6 +67,13 @@ func main() {
 	// add a tweet
 	v1Router.Post("/tweets", apiCfg.middlewareAuth(apiCfg.handlerCreateTweet))
 
+	// follow a user
+	v1Router.Post("/follow", apiCfg.middlewareAuth(apiCfg.handlerCreateFollow))
+	// get accounts that the user follows
+	v1Router.Get("/follow", apiCfg.middlewareAuth(apiCfg.handlerGetFollows))
+	// unfollow a user
+	v1Router.Delete("/follow/{followID}", apiCfg.middlewareAuth(apiCfg.handlerDeleteFollow))
+
 	router.Mount("/v1", v1Router)
 
 	srv := &http.Server{
