@@ -5,9 +5,11 @@
 ### Create the database in PostgreSQL
 Use CLI, pgAdmin, or another tool to create the twitter_clone_db
 
-### Perform database migrations
+### Perform database migrations if necessary
 `cd sql/schema`
-`goose postgres postgres_link up`
+`psql -h localhost -U <username> -l`
+`createdb -h localhost -U <username> twitter_clone_db`
+`goose postgres <DB_URL> up`
 
 ### Build the code
 `go build`
